@@ -1,0 +1,23 @@
+version: "3"
+services:
+  mysql-docker-container:
+    image: mysql:5.7.26
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=enrolleemanagement
+      - MYSQL_USER=app_user
+      - MYSQL_PASSWORD=test123
+    ports:
+      - "6033:3306"
+  enrolleetracking:
+    image: enrolleetracking-image
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      WAIT_HOSTS: mysql:3306
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql-docker-container
